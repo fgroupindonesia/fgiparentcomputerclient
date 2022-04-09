@@ -5,9 +5,15 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 /**
- *
- * @author asus
+ * 
+ * @author fgroupindonesia
+ * @project FGI Parent Remote Client 
+ * for desktop platform (pc & laptop)
+ * @file CMDCaller.java
+ * @usage a background process for executing CommandPrompt (as a daemon no GUI appeared)
+ * 
  */
+
 public class CMDCaller {
 
     private static ArrayList<String> data = new ArrayList<String>();

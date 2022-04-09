@@ -1,10 +1,14 @@
 package bean;
 
 /**
- *
- * @author asus
+ * 
+ * @author fgroupindonesia
+ * @project FGI Parent Remote Client 
+ * for desktop platform (pc & laptop)
+ * @file Reply.java
+ * @usage from Server
+ * 
  */
-// this object is used from Server
 public class Reply {
     private String status;
     private String data;

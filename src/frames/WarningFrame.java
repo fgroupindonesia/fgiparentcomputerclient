@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package frames;
 
 import helper.Blinker;
@@ -12,7 +7,11 @@ import java.awt.Toolkit;
 
 /**
  *
- * @author asus
+ * @author fgroupindonesia
+ * @project FGI Parent Remote Client for desktop platform (pc & laptop)
+ * @file WarningFrame.java
+ * @usage main frame GUI for displaying the blinking message (warning message)
+ *
  */
 public class WarningFrame extends javax.swing.JFrame {
 
@@ -29,8 +28,10 @@ public class WarningFrame extends javax.swing.JFrame {
     }
 
     public void setText(String msg) {
-        jlabelMessage.setText(msg);
        
+            jlabelMessage.setText(msg);
+        
+
     }
 
     public WarningFrame(Main mf) {
@@ -64,8 +65,9 @@ public class WarningFrame extends javax.swing.JFrame {
         setUndecorated(true);
         setResizable(false);
 
-        jlabelMessage.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
+        jlabelMessage.setFont(new java.awt.Font("Tahoma", 1, 77)); // NOI18N
         jlabelMessage.setForeground(new java.awt.Color(255, 51, 51));
+        jlabelMessage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlabelMessage.setText("Tuliskan Pesan Anda Disini");
         getContentPane().add(jlabelMessage, java.awt.BorderLayout.CENTER);
 

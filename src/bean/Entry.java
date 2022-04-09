@@ -2,10 +2,14 @@
 package bean;
 
 /**
- *
- * @author asus
+ * 
+ * @author fgroupindonesia
+ * @project FGI Parent Remote Client 
+ * for desktop platform (pc & laptop)
+ * @file Entry.java
+ * @usage from Client 
+ * 
  */
-// this object is used from Client
 public class Entry {
 
     private String command;

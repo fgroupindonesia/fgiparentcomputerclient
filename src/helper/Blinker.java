@@ -1,13 +1,17 @@
 package helper;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JLabel;
 
 /**
- *
- * @author asus
+ * 
+ * @author fgroupindonesia
+ * @project FGI Parent Remote Client 
+ * for desktop platform (pc & laptop)
+ * @file Blinker.java
+ * @usage a thread process with a timer as JLabel Animator
+ * 
  */
+
 public class Blinker extends Thread {
 
     JLabel textLabel;

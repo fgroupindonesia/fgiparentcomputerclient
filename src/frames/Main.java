@@ -1,43 +1,85 @@
 package frames;
 
+import helper.MonitorHelper;
+import helper.PathHelper;
 import helper.SocketHelper;
+import java.awt.Desktop;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.net.URL;
+import javax.swing.ImageIcon;
 
 /**
  *
- * @author asus
+ * @author fgroupindonesia
+ * @project FGI Parent Remote Client for desktop platform (pc & laptop)
+ * @file Main.java
+ * @usage main frame GUI for displaying basic information
+ *
  */
 public class Main extends javax.swing.JFrame {
 
+    MonitorHelper mhp;
     WarningFrame wmf;
+
+    public void openWebpage(String urlString) {
+        try {
+            Desktop.getDesktop().browse(new URL(urlString).toURI());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setIcon() {
+
+        // obtaining from the icon programData
+        ImageIcon img = new ImageIcon(PathHelper.getLogoPath());
+        setIconImage(img.getImage());
+    }
+
     public void blinking(String message) {
         this.setVisible(false);
+
+        if (mhp == null) {
+            mhp = new MonitorHelper();
+        }
+
         wmf = new WarningFrame(this);
         wmf.setText(message);
-        wmf.setVisible(true);
+
         wmf.centerScreen();
+
+        if (mhp.hasTwoMonitors()) {
+            mhp.showOnScreen(1, wmf);
+            mhp.setWider(1, wmf);
+            System.out.println("Yes this pc has 2 monitors...");
+        }
+
+        wmf.setVisible(true);
     }
-    
-    public void removeBlinking(){
-        wmf.dispose();
+
+    public void removeBlinking() {
+        if (wmf != null) {
+            wmf.dispose();
+        }
+
         this.setVisible(true);
     }
 
     /**
      * Creates new form Main
      */
+    SocketHelper shp = new SocketHelper();
+
     public Main() {
         initComponents();
         //jTextArea1.setText(stb.toString());
-        SocketHelper shp = new SocketHelper();
+
         shp.setOutputArea(textAreaDescription);
         shp.setMainFrame(this);
         shp.start();
 
         getMyIP();
+        setIcon();
     }
 
     private void getMyIP() {
@@ -67,20 +109,32 @@ public class Main extends javax.swing.JFrame {
         textAreaDescription = new javax.swing.JTextArea();
         labelRecent = new javax.swing.JLabel();
         buttonClear = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        labelFB = new javax.swing.JLabel();
+        labelIG = new javax.swing.JLabel();
+        labelTW = new javax.swing.JLabel();
+        labelUT = new javax.swing.JLabel();
+        labelWA = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Parent Remote Client");
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
-        labelIpAddress.setText("Current IP Address : -");
+        labelIpAddress.setText("- Current IP Address : -");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setText("FGI Remote Parent Computer Client");
+        jLabel1.setText("FGI Parent Remote Client");
 
         textAreaDescription.setColumns(20);
         textAreaDescription.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         textAreaDescription.setRows(5);
         jScrollPane1.setViewportView(textAreaDescription);
 
-        labelRecent.setText("Recent Activities :");
+        labelRecent.setText("- Recent Activities :");
 
         buttonClear.setText("Clear");
         buttonClear.addActionListener(new java.awt.event.ActionListener() {
@@ -89,38 +143,89 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        labelFB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/fb.png"))); // NOI18N
+        labelFB.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        labelFB.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labelFBMouseClicked(evt);
+            }
+        });
+        jPanel1.add(labelFB);
+
+        labelIG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ig.png"))); // NOI18N
+        labelIG.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        labelIG.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labelIGMouseClicked(evt);
+            }
+        });
+        jPanel1.add(labelIG);
+
+        labelTW.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/tw.png"))); // NOI18N
+        labelTW.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        labelTW.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labelTWMouseClicked(evt);
+            }
+        });
+        jPanel1.add(labelTW);
+
+        labelUT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/utube.png"))); // NOI18N
+        labelUT.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        labelUT.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labelUTMouseClicked(evt);
+            }
+        });
+        jPanel1.add(labelUT);
+
+        labelWA.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/whatsapp.png"))); // NOI18N
+        labelWA.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labelWAMouseClicked(evt);
+            }
+        });
+        jPanel1.add(labelWA);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(buttonClear)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addGap(10, 10, 10)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(labelRecent, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(labelIpAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(labelRecent, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelIpAddress, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(buttonClear))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(16, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addGap(21, 21, 21)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(labelIpAddress)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(labelRecent)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonClear)
-                .addContainerGap(71, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(buttonClear)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -130,6 +235,31 @@ public class Main extends javax.swing.JFrame {
     private void buttonClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonClearActionPerformed
         textAreaDescription.setText("");
     }//GEN-LAST:event_buttonClearActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        if(shp!=null)
+        shp.closing();
+    }//GEN-LAST:event_formWindowClosing
+
+    private void labelFBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelFBMouseClicked
+        openWebpage("https://facebook.com/fgroupindonesia");
+    }//GEN-LAST:event_labelFBMouseClicked
+
+    private void labelIGMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelIGMouseClicked
+        openWebpage("https://www.instagram.com/fgroup.indonesia/");
+    }//GEN-LAST:event_labelIGMouseClicked
+
+    private void labelTWMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelTWMouseClicked
+        openWebpage("https://twitter.com/fgroupindonesia/");
+    }//GEN-LAST:event_labelTWMouseClicked
+
+    private void labelUTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelUTMouseClicked
+         openWebpage("https://youtube.com/fgroupindonesia/");
+    }//GEN-LAST:event_labelUTMouseClicked
+
+    private void labelWAMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelWAMouseClicked
+        openWebpage("https://wa.me/6285795569337?text=hello%20admin%21%0ASaya%20mau%20pakai%20FGroupRemote%20Client%20%26%20Android...%0A%2Atolong%20bantu%20saya%2A");
+    }//GEN-LAST:event_labelWAMouseClicked
 
     /**
      * @param args the command line arguments
@@ -169,9 +299,15 @@ public class Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonClear;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel labelFB;
+    private javax.swing.JLabel labelIG;
     private javax.swing.JLabel labelIpAddress;
     private javax.swing.JLabel labelRecent;
+    private javax.swing.JLabel labelTW;
+    private javax.swing.JLabel labelUT;
+    private javax.swing.JLabel labelWA;
     private javax.swing.JTextArea textAreaDescription;
     // End of variables declaration//GEN-END:variables
 }

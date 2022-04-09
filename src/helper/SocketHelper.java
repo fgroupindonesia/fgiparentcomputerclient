@@ -6,12 +6,22 @@ import java.net.*;
 import javax.swing.JTextArea;
 
 /**
- *
- * @author asus
+ * 
+ * @author fgroupindonesia
+ * @project FGI Parent Remote Client 
+ * for desktop platform (pc & laptop)
+ * @file SocketHelper.java
+ * @usage a socket creator (ip address & port)
+ * and also a main controller for several initial calls.
+ * 
  */
+
 public class SocketHelper extends Thread{
 
     ServerSocket providerSocket;
+    Socket sock;
+    BufferedReader input;
+    PrintWriter output;
     JTextArea textarea;
     String message;
     MessageTranslator msgTrans = new MessageTranslator(this);
@@ -28,6 +38,11 @@ public class SocketHelper extends Thread{
     
     public void run(){
         opening();
+    }
+    
+    public void setInputOutput(BufferedReader inputCome, PrintWriter outputCome){
+        input = inputCome;
+        output = outputCome;
     }
     
     public void opening() {
@@ -47,13 +62,14 @@ public class SocketHelper extends Thread{
         }
     }
 
-    public void closing(BufferedReader input, PrintWriter output, Socket sock) {
+    public void closing() {
         try {
             input.close();
             output.close();
             sock.close();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            //ex.printStackTrace(); let it be
+            System.out.println("Closed...");
         }
 
     }

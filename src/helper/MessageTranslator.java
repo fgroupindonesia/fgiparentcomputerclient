@@ -14,10 +14,17 @@ import javax.swing.JTextArea;
 import javax.swing.text.DefaultCaret;
 import static javax.swing.text.DefaultCaret.ALWAYS_UPDATE;
 
+
 /**
- *
- * @author asus
+ * 
+ * @author fgroupindonesia
+ * @project FGI Parent Remote Client 
+ * for desktop platform (pc & laptop)
+ * @file MessageTranslator.java
+ * @usage a translator between client and server communication
+ * 
  */
+
 public class MessageTranslator {
 
     SocketHelper shp = null;
@@ -52,55 +59,72 @@ public class MessageTranslator {
         String message = null;
         boolean keepReading = true;
 
-        try {
-            connection = providerSocket.accept();
+        while (keepReading) {
 
-            if (jtx != null) {
-                jtx.append("connection success!\n");
-            }
-
-            System.out.println("Connection received from " + connection.getInetAddress().getHostName());
-            //3. get Input and Output streams
-            output = new PrintWriter(connection.getOutputStream(), true);
-            input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-            output.println(createReplyAsJSONString("success", null));
-
-            String line = null;
-            while ((line = input.readLine()) != null) {
-                System.out.println("We got " + line);
-
-                // we got entry object
-                Entry dataEntry = new Gson().fromJson(line, Entry.class);
+            try {
+                System.out.println("Ready to accept another socket...");
+                connection = providerSocket.accept();
 
                 if (jtx != null) {
-                    jtx.append("client : " + dataEntry.getCommand() + "\n");
+                    jtx.append("connection success!\n");
                     scrollDown();
                 }
 
-                detectTheMessage(dataEntry);
+                System.out.println("Connection received from " + connection.getInetAddress().getHostName());
+                //3. get Input and Output streams
+                output = new PrintWriter(connection.getOutputStream(), true);
+                input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
-                if (dataEntry.getCommand().contains("list_app")) {
-                    // wait for 3 seconds before proceed
-                    Thread.sleep(7000);
-                    output.println(createReplyAsJSONString("private", CMDCaller.getDataAsString()));
-                } else {
-                    output.println(createReplyAsJSONString("okay", null));
+                // let the first object SHP also know the
+                // way of closing later
+                shp.setInputOutput(input, output);
+                
+                output.println(createReplyAsJSONString("success", null));
+
+                String line = null;
+                while ((line = input.readLine()) != null) {
+                    System.out.println("We got " + line);
+
+                    // we got entry object
+                    Entry dataEntry = new Gson().fromJson(line, Entry.class);
+
+                    if (jtx != null) {
+                        jtx.append("client : " + dataEntry.getCommand() + "\n");
+                        scrollDown();
+                    }
+
+                    detectTheMessage(dataEntry);
+
+                    if (dataEntry.getCommand().contains("list_app")) {
+                        // wait for 3 seconds before proceed
+                        Thread.sleep(7000);
+                        output.println(createReplyAsJSONString("private", CMDCaller.getDataAsString()));
+                    } else {
+                        output.println(createReplyAsJSONString("okay", null));
+                    }
+
                 }
 
+            } catch (Exception ex) {
+                System.err.println("Data received in unknown format " + ex.getMessage());
+                //keepReading = false;
+                //recreateBack();
             }
 
-        } catch (Exception ex) {
-            System.err.println("Data received in unknown format " + ex.getMessage());
-            //keepReading = false;
-            //recreateBack();
-        }
+            System.out.println("Connection ended! Thanks...");
+            disableWarning();
+            
+            if (jtx != null) {
+                jtx.append("client : disconnected!\n");
+                scrollDown();
+            }
 
+        }
     }
 
     private void recreateBack() {
         if (shp != null) {
-            shp.closing(input, output, connection);
+            shp.closing();
         }
 
         shp.opening();
