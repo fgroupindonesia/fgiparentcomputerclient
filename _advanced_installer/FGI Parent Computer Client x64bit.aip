@@ -135,7 +135,7 @@
     <ROW Component="keytool.exe" ComponentId="{B8870DED-8AA5-4591-9E8B-660D714D6D12}" Directory_="bin_Dir" Attributes="256" KeyPath="keytool.exe"/>
     <ROW Component="lcms.dll" ComponentId="{A3D5CFC2-9C60-4FD6-B7DA-2C590C73EFAE}" Directory_="bin_Dir" Attributes="256" KeyPath="lcms.dll"/>
     <ROW Component="logging.properties" ComponentId="{E16D8919-57F2-40CF-B705-6FA51DC6FB9C}" Directory_="conf_Dir" Attributes="0" KeyPath="logging.properties" Type="0"/>
-    <ROW Component="logo.png" ComponentId="{9345B672-D1FD-4A96-AEE3-1CAE09937428}" Directory_="FGIParentRemoteClient_Dir" Attributes="0" KeyPath="logo.png" Type="0"/>
+    <ROW Component="logo.png" ComponentId="{B3EE4775-5EE0-4AA6-B47C-55E05A42E640}" Directory_="FGIParentRemoteClient_Dir" Attributes="0" KeyPath="logo.png" Type="0"/>
     <ROW Component="mlib_image.dll" ComponentId="{DAE2EBF9-E76B-4EC3-B0BC-2C15B2AF8D75}" Directory_="bin_Dir" Attributes="256" KeyPath="mlib_image.dll"/>
     <ROW Component="msvcp140.dll" ComponentId="{75CC1457-AA90-49BD-9F22-59AAB1A2EE53}" Directory_="bin_Dir" Attributes="256" KeyPath="msvcp140.dll"/>
     <ROW Component="net.dll" ComponentId="{4EBC5C91-CE1A-4424-ABBF-F930F5614220}" Directory_="bin_Dir" Attributes="256" KeyPath="net.dll"/>
@@ -155,7 +155,6 @@
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
-    <ROW File="logo.png" Component_="logo.png" FileName="logo.png" Attributes="0" SourcePath="C:\ProgramData\FGroupIndonesia\FGIParentRemoteClient\logo.png" SelfReg="false"/>
     <ROW File="NirCmd.chm" Component_="NirCmd.chm" FileName="NirCmd.chm" Attributes="0" SourcePath="..\_cut_me_into_app_Data\x64\NirCmd.chm" SelfReg="false"/>
     <ROW File="nircmd.exe" Component_="nircmd.exe" FileName="nircmd.exe" Attributes="0" SourcePath="..\_cut_me_into_app_Data\x64\nircmd.exe" SelfReg="false" DigSign="true"/>
     <ROW File="nircmdc.exe" Component_="nircmdc.exe" FileName="nircmdc.exe" Attributes="0" SourcePath="..\_cut_me_into_app_Data\x64\nircmdc.exe" SelfReg="false" DigSign="true"/>
@@ -301,6 +300,7 @@
     <ROW File="tzdb.dat" Component_="classlist" FileName="tzdb.dat" Attributes="0" SourcePath="..\packed\jre\lib\tzdb.dat" SelfReg="false"/>
     <ROW File="tzmappings" Component_="classlist" FileName="TZMAPP~1|tzmappings" Attributes="0" SourcePath="..\packed\jre\lib\tzmappings" SelfReg="false"/>
     <ROW File="release" Component_="release" FileName="release" Attributes="0" SourcePath="..\packed\jre\release" SelfReg="false"/>
+    <ROW File="logo.png" Component_="logo.png" FileName="logo.png" Attributes="0" SourcePath="..\..\..\..\backedup\_pix\FGroupIndonesia\fgi-parent-remote\logo.png" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -377,7 +377,6 @@
     <ROW Feature_="MainFeature" Component_="FGroupIndonesia"/>
     <ROW Feature_="MainFeature" Component_="NirCmd.chm"/>
     <ROW Feature_="MainFeature" Component_="nircmd.exe"/>
-    <ROW Feature_="MainFeature" Component_="logo.png"/>
     <ROW Feature_="MainFeature" Component_="nircmdc.exe"/>
     <ROW Feature_="MainFeature" Component_="apimswincorefilel120.dll"/>
     <ROW Feature_="MainFeature" Component_="apimswincorefilel210.dll"/>
@@ -458,6 +457,7 @@
     <ROW Feature_="MainFeature" Component_="blocked.certs"/>
     <ROW Feature_="MainFeature" Component_="Xusage.txt"/>
     <ROW Feature_="MainFeature" Component_="release"/>
+    <ROW Feature_="MainFeature" Component_="logo.png"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="REMOTEPARENTLOGO.exe" SourcePath="..\..\..\..\backedup\_pix\FGroupIndonesia\fgi-parent-remote\REMOTE-PARENT-LOGO.ico" Index="0"/>

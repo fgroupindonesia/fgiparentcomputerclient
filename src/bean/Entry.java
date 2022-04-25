@@ -15,6 +15,15 @@ public class Entry {
     private String command;
     private String data;
 
+    public Entry(){
+        
+    }
+    
+    public Entry (String cmd, String dat){
+        command = cmd;
+        data = dat;
+    }
+    
     /**
      * @return the command
      */

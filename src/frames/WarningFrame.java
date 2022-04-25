@@ -62,6 +62,7 @@ public class WarningFrame extends javax.swing.JFrame {
         jlabelMessage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAlwaysOnTop(true);
         setUndecorated(true);
         setResizable(false);
 

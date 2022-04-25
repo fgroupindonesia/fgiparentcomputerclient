@@ -5,15 +5,14 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 /**
- * 
+ *
  * @author fgroupindonesia
- * @project FGI Parent Remote Client 
- * for desktop platform (pc & laptop)
+ * @project FGI Parent Remote Client for desktop platform (pc & laptop)
  * @file CMDCaller.java
- * @usage a background process for executing CommandPrompt (as a daemon no GUI appeared)
- * 
+ * @usage a background process for executing CommandPrompt (as a daemon no GUI
+ * appeared)
+ *
  */
-
 public class CMDCaller {
 
     private static ArrayList<String> data = new ArrayList<String>();
@@ -21,25 +20,37 @@ public class CMDCaller {
     public static ArrayList<String> getData() {
         return data;
     }
-    
-    public static String getDataAsString(){
+
+    public static String getDataAsString() {
         StringBuffer stb = new StringBuffer();
-        
-        for(String s: data){
-            stb.append(s.trim()+";");
+
+        for (String s : data) {
+            stb.append(s.trim() + ";");
         }
-        
-       return stb.toString();
+
+        return stb.toString();
     }
 
-    public static void muteSystem(){
-        execute("nircmd.exe mutesysvolume 1", false);
+    public static void muteSystem() {
+        //execute("nircmd.exe mutesysvolume 1", false);
+        // we changed into
+        execute("nircmd.exe setvolume 0 0 0", false);
     }
-    
-    public static void unMuteSystem(){
-        execute("nircmd.exe mutesysvolume 0", false);
+
+    public static void setSound(int nums) {
+        //execute("nircmd.exe mutesysvolume 1", false);
+        // we changed into
+        double valNirCMD = 655.35;
+        int chosen = (int) (nums * valNirCMD);
+        execute("nircmd.exe setvolume 0 " + chosen + " " + chosen, false);
     }
-    
+
+    public static void unMuteSystem() {
+        //execute("nircmd.exe mutesysvolume 0", false);
+        // we changed into
+        execute("nircmd.exe setvolume 0 65535 65535", false);
+    }
+
     public static void kill(String filename) {
         // filename is with extension
         execute("taskkill.exe /F /IM " + filename, false);
@@ -55,7 +66,7 @@ public class CMDCaller {
     public static void shutdown() {
         execute("shutdown.exe -s -f -t 0", false);
     }
-    
+
     public static void restart() {
         execute("shutdown.exe -r -f -t 0", false);
     }
@@ -74,8 +85,8 @@ public class CMDCaller {
                 while ((line = input.readLine()) != null) {
                     //System.out.println(line); //<-- Parse data here.
                     if (line.contains(".exe")) {
-                        if(!data.contains(line)){
-                        data.add(line);
+                        if (!data.contains(line)) {
+                            data.add(line);
                         }
                     }
                 }
