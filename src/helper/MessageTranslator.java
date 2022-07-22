@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import frames.Main;
+import frames.TimerCountDownFrame;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -51,7 +52,7 @@ public class MessageTranslator {
     private void scrollDown() {
         DefaultCaret caret = (DefaultCaret) jtx.getCaret();
         caret.setUpdatePolicy(ALWAYS_UPDATE);
-        
+
         jtx.setCaretPosition(jtx.getDocument().getLength());
     }
 
@@ -189,8 +190,14 @@ public class MessageTranslator {
             case "shutdown_pc":
                 CMDCaller.shutdown();
                 break;
+            case "shutdown_pc_timer":
+                terminateByTimer(Integer.parseInt(msg.getData()), SWorker.MODE_SHUTDOWN);
+                break;
             case "restart_pc":
                 CMDCaller.restart();
+                break;
+            case "restart_pc_timer":
+                terminateByTimer(Integer.parseInt(msg.getData()), SWorker.MODE_RESTART);
                 break;
             case "list_app":
                 CMDCaller.listRunningApp();
@@ -227,6 +234,32 @@ public class MessageTranslator {
 
     private void disableWarning() {
         mainFrame.removeBlinking();
+    }
+
+    SWorker sw1;
+    TimerCountDownFrame tmc;
+
+    private void terminateByTimer(int minLimit, int aModeChosen) {
+
+        if (tmc != null) {
+            tmc.dispose();
+        }
+
+        tmc = new TimerCountDownFrame();
+        tmc.setVisible(true);
+
+        if (sw1 != null) {
+            sw1.cancel(true);
+        }
+
+        sw1 = new SWorker();
+        sw1.setMinuteLimit(minLimit);
+        sw1.setLabel(tmc.getLabel());
+        sw1.setMode(aModeChosen);
+
+        // Executes the swingworker on worker thread
+        sw1.execute();
+
     }
 
 }

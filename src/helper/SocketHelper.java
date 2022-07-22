@@ -45,10 +45,12 @@ public class SocketHelper extends Thread{
         output = outputCome;
     }
     
+    final int OPENING_PORT = 2004;
+    
     public void opening() {
         try {
             //1. creating a server socket
-            providerSocket = new ServerSocket(2004);
+            providerSocket = new ServerSocket(OPENING_PORT);
             //2. Wait for connection
             System.out.println("Waiting for connection");
 

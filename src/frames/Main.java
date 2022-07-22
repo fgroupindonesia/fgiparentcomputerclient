@@ -1,8 +1,10 @@
 package frames;
 
+import helper.AdzanAnnouncer;
 import helper.MonitorHelper;
 import helper.PathHelper;
 import helper.SocketHelper;
+
 import java.awt.Desktop;
 import java.net.InetAddress;
 import java.net.URL;
@@ -59,6 +61,7 @@ public class Main extends javax.swing.JFrame {
 
     boolean hiddenStat = true;
     MenuItem showHideItem = new MenuItem("Show");
+    MenuItem timerItem = new MenuItem("Timer");
 
     private void createTray() {
         if (SystemTray.isSupported()) {
@@ -105,8 +108,16 @@ public class Main extends javax.swing.JFrame {
                     System.exit(0);
                 }
             });
+            
+            timerItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent arg0) {
+                    openTimerConfig();
+                }
+            });
 
             popup.add(showHideItem);
+            popup.add(timerItem);
             popup.add(menuExitItem);
 
             trayIcon = new TrayIcon(imageWaiting, "FGI Parent Control Client", popup);
@@ -127,6 +138,22 @@ public class Main extends javax.swing.JFrame {
                 System.err.println(e);
             }
         }
+    }
+    
+    private void openTimerConfig(){
+        TimerConfig frame = new TimerConfig(this, true);
+        frame.setVisible(true);
+    }
+    
+    public void setCountDown(String action, String time){
+        // executing the timerframe
+        
+    }
+    
+    AdzanAnnouncer adz;
+
+    private void preparePrayersTime() {
+        adz = new AdzanAnnouncer();
     }
 
     public void openWebpage(String urlString) {
@@ -170,7 +197,8 @@ public class Main extends javax.swing.JFrame {
             wmf.dispose();
         }
 
-        this.setVisible(true);
+        // we keep the window hidden still
+        //this.setVisible(true);
     }
 
     /**
@@ -182,6 +210,9 @@ public class Main extends javax.swing.JFrame {
         initComponents();
         //jTextArea1.setText(stb.toString());
 
+        // for Adthan purposes
+        preparePrayersTime();
+        
         shp.setOutputArea(textAreaDescription);
         shp.setMainFrame(this);
         shp.start();
@@ -242,6 +273,8 @@ public class Main extends javax.swing.JFrame {
         radioModeLocal = new javax.swing.JRadioButton();
         radioModeGlobal = new javax.swing.JRadioButton();
         labelExit = new javax.swing.JLabel();
+        labelPrayersTime = new javax.swing.JLabel();
+        labelSettings = new javax.swing.JLabel();
 
         setTitle("FGI Parent Control Client");
         setResizable(false);
@@ -343,25 +376,28 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        labelPrayersTime.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/moonstar.png"))); // NOI18N
+        labelPrayersTime.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        labelPrayersTime.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labelPrayersTimeMouseClicked(evt);
+            }
+        });
+
+        labelSettings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/settings.png"))); // NOI18N
+        labelSettings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        labelSettings.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labelSettingsMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(labelIpAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelRecent, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(163, 163, 163)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -371,7 +407,26 @@ public class Main extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelExit, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(13, 13, 13)
-                        .addComponent(buttonClear)))
+                        .addComponent(buttonClear))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(labelIpAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(labelSettings)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(labelPrayersTime))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(10, 10, 10)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(labelRecent, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(163, 163, 163)
+                                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -379,8 +434,11 @@ public class Main extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(jLabel1)
-                .addGap(19, 19, 19)
-                .addComponent(labelIpAddress)
+                .addGap(9, 9, 9)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(labelIpAddress)
+                    .addComponent(labelPrayersTime)
+                    .addComponent(labelSettings))
                 .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(labelRecent)
@@ -442,8 +500,22 @@ public class Main extends javax.swing.JFrame {
     private void labelExitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelExitMouseClicked
 
         System.exit(0);
-        
+
     }//GEN-LAST:event_labelExitMouseClicked
+
+    private void labelPrayersTimeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelPrayersTimeMouseClicked
+        // Opening new Frame
+        if (adz != null) {
+            PrayersTime dialog = new PrayersTime(this, true);
+            dialog.setData(adz.getPrayerData(), adz.getMyIP().getCity());
+
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_labelPrayersTimeMouseClicked
+
+    private void labelSettingsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelSettingsMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_labelSettingsMouseClicked
 
     boolean localMode = true;
 
@@ -487,7 +559,9 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel labelFB;
     private javax.swing.JLabel labelIG;
     private javax.swing.JLabel labelIpAddress;
+    private javax.swing.JLabel labelPrayersTime;
     private javax.swing.JLabel labelRecent;
+    private javax.swing.JLabel labelSettings;
     private javax.swing.JLabel labelTW;
     private javax.swing.JLabel labelUT;
     private javax.swing.JLabel labelWA;
