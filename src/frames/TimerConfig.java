@@ -16,22 +16,27 @@ public class TimerConfig extends javax.swing.JDialog {
      */
     public TimerConfig(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+
         initComponents();
+        setMainFrameRef((Main) parent);
+    }
+
+    private void setMainFrameRef(Main mf) {
+        mainFrame = mf;
     }
 
     // time should be --> HH:MM format
     String timeStored;
     String actionChosen;
     Main mainFrame;
-    
-    private void apply(){
-        actionChosen = comboboxAction.getSelectedItem().toString();                
-        timeStored = labelTimer.getText().trim();
-        
-        mainFrame.setCountDown(actionChosen, timeStored);
+
+    private void start() {
+        actionChosen = comboboxAction.getSelectedItem().toString();
+        timeStored = labelTimer.getText().replaceAll("\\s+","");
+
+        mainFrame.applyTimerWork(actionChosen, timeStored);
     }
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -143,6 +148,11 @@ public class TimerConfig extends javax.swing.JDialog {
 
         buttonApply.setText("Apply");
         buttonApply.setEnabled(false);
+        buttonApply.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonApplyActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -215,18 +225,24 @@ public class TimerConfig extends javax.swing.JDialog {
         applyTimeText();
     }//GEN-LAST:event_buttonDecreaseMinuteActionPerformed
 
+    private void buttonApplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonApplyActionPerformed
+        start();
+        this.dispose();
+
+    }//GEN-LAST:event_buttonApplyActionPerformed
+
     private void applyTimeText() {
 
         hourText = getTwoDigit(hour);
         minuteText = getTwoDigit(minute);
-        
+
         labelTimer.setText(hourText + " : " + minuteText);
-        
+
         toggleApplyButton();
     }
-    
-    private void toggleApplyButton(){
-        if(hour!=0 || minute != 0){
+
+    private void toggleApplyButton() {
+        if (hour != 0 || minute != 0) {
             buttonApply.setEnabled(true);
         }
     }
@@ -239,7 +255,7 @@ public class TimerConfig extends javax.swing.JDialog {
 
         if (val < 10) {
             n = "0" + val;
-        }else{
+        } else {
             n = String.valueOf(val);
         }
 

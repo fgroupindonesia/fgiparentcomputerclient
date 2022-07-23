@@ -13,7 +13,7 @@ import helper.AdzanAnnouncer;
 
 public class TestExecutor {
     public static void main(String[] args) {
-        AdzanAnnouncer adz = new AdzanAnnouncer();
+        AdzanAnnouncer adz = new AdzanAnnouncer(null);
         //System.out.println(adz.getData().toString());
     }
 }

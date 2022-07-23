@@ -5,11 +5,96 @@
  */
 package frames;
 
+import java.awt.event.ItemEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Properties;
+
 /**
  *
  * @author asus
  */
 public class Settings extends javax.swing.JDialog {
+
+    String systemPath = System.getenv("APPDATA") + File.separator + "fgroupindonesia" + File.separator + "fgpcc";
+    String fileSettings = systemPath + File.separator + "settings.prop";
+    static String optionChosen;
+
+    public static final String MODE_PLAY_ADZAN = "play-adzan",
+            MODE_MUTE_AUDIO = "mute-audio",
+            MODE_CLOSE_BROWSER = "close-browser";
+
+    private void prepareDefaultSettings() {
+
+        new File(systemPath).mkdirs();
+
+        try {
+
+            Properties prop = new Properties();
+
+            OutputStream output = null;
+            InputStream input = null;
+
+            if (!new File(fileSettings).exists()) {
+                output = new FileOutputStream(fileSettings);
+                // set the properties value
+                prop.setProperty("adzan", MODE_PLAY_ADZAN);
+                //prop.setProperty("db.user", "sss");
+                //prop.setProperty("db.password", "sss");
+
+                // save properties to project root folder
+                prop.store(output, null);
+                
+                // default
+                optionChosen = MODE_PLAY_ADZAN;
+                radioPlayAdzan.setSelected(true);
+
+                //System.out.println(prop);
+            } else {
+                input = new FileInputStream(fileSettings);
+                // load the file
+                prop.load(input);
+
+                optionChosen = prop.getProperty("adzan");
+
+                if (optionChosen.equalsIgnoreCase(MODE_PLAY_ADZAN)) {
+                    radioPlayAdzan.setSelected(true);
+                } else if (optionChosen.equalsIgnoreCase(MODE_CLOSE_BROWSER)) {
+                    radioCloseBrowser.setSelected(true);
+                } else if (optionChosen.equalsIgnoreCase(MODE_MUTE_AUDIO)) {
+                    radioMuteAudio.setSelected(true);
+                }
+
+            }
+        } catch (Exception io) {
+            io.printStackTrace();
+        }
+    }
+
+    public static String getOptionChosen(){
+        return optionChosen;
+    }
+    
+    private void saveSettings() {
+        try ( OutputStream output = new FileOutputStream(fileSettings)) {
+
+            Properties prop = new Properties();
+
+            // set the properties value
+            prop.setProperty("adzan", optionChosen);
+            //prop.setProperty("db.user", "sss");
+            //prop.setProperty("db.password", "sss");
+
+            // save properties to project root folder
+            prop.store(output, null);
+
+        } catch (Exception io) {
+            io.printStackTrace();
+        }
+    }
 
     /**
      * Creates new form Settings
@@ -17,6 +102,8 @@ public class Settings extends javax.swing.JDialog {
     public Settings(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        prepareDefaultSettings();
+
     }
 
     /**
@@ -28,21 +115,142 @@ public class Settings extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        radioPlayAdzan = new javax.swing.JRadioButton();
+        radioMuteAudio = new javax.swing.JRadioButton();
+        radioCloseBrowser = new javax.swing.JRadioButton();
+        jLabel2 = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Settings");
+        setAlwaysOnTop(true);
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/settings.png"))); // NOI18N
+        jLabel1.setText("Settings");
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Adzan"));
+
+        buttonGroup1.add(radioPlayAdzan);
+        radioPlayAdzan.setText("Play Adzan Audio");
+        radioPlayAdzan.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                radioPlayAdzanItemStateChanged(evt);
+            }
+        });
+
+        buttonGroup1.add(radioMuteAudio);
+        radioMuteAudio.setText("Mute Audio");
+        radioMuteAudio.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                radioMuteAudioItemStateChanged(evt);
+            }
+        });
+
+        buttonGroup1.add(radioCloseBrowser);
+        radioCloseBrowser.setText("Close All Browsers");
+        radioCloseBrowser.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                radioCloseBrowserItemStateChanged(evt);
+            }
+        });
+
+        jLabel2.setText("Only applicable for each prayers' time given.");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(radioCloseBrowser)
+                    .addComponent(radioMuteAudio)
+                    .addComponent(radioPlayAdzan))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(radioPlayAdzan)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(radioMuteAudio)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(radioCloseBrowser)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+
+        // save all data to local path
+        if (optionChosen != null)
+            saveSettings();
+    }//GEN-LAST:event_formWindowClosed
+
+    private void radioPlayAdzanItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_radioPlayAdzanItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            optionChosen = MODE_PLAY_ADZAN;
+
+        }
+
+    }//GEN-LAST:event_radioPlayAdzanItemStateChanged
+
+    private void radioMuteAudioItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_radioMuteAudioItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            optionChosen = MODE_MUTE_AUDIO;
+
+        }
+    }//GEN-LAST:event_radioMuteAudioItemStateChanged
+
+    private void radioCloseBrowserItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_radioCloseBrowserItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            optionChosen = MODE_CLOSE_BROWSER;
+
+        }
+    }//GEN-LAST:event_radioCloseBrowserItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -87,5 +295,12 @@ public class Settings extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JRadioButton radioCloseBrowser;
+    private javax.swing.JRadioButton radioMuteAudio;
+    private javax.swing.JRadioButton radioPlayAdzan;
     // End of variables declaration//GEN-END:variables
 }

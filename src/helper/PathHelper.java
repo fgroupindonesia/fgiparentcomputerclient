@@ -12,8 +12,8 @@ import java.io.File;
  */
 public class PathHelper {
 
-    static String dir = "C:\\ProgramData\\FGroupIndonesia\\FGIParentRemoteClient\\";
-
+    static String dir =  System.getenv("APPDATA") + File.separator + "fgroupindonesia" + File.separator + "fgpcc"+ File.separator;
+    
     public static String getLogoPath() {
         return new File(dir + "logo.png").getAbsolutePath();
     }

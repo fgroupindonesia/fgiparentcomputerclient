@@ -1,6 +1,7 @@
 package frames;
 
 import helper.AdzanAnnouncer;
+import helper.CMDCaller;
 import helper.MonitorHelper;
 import helper.PathHelper;
 import helper.SocketHelper;
@@ -20,6 +21,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.JFrame;
+import javax.swing.text.DefaultCaret;
+import static javax.swing.text.DefaultCaret.ALWAYS_UPDATE;
 
 /**
  *
@@ -108,11 +111,13 @@ public class Main extends javax.swing.JFrame {
                     System.exit(0);
                 }
             });
-            
+
             timerItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent arg0) {
-                    openTimerConfig();
+                    if (timerItem.isEnabled()) {
+                        openTimerConfig();
+                    }
                 }
             });
 
@@ -139,21 +144,48 @@ public class Main extends javax.swing.JFrame {
             }
         }
     }
-    
-    private void openTimerConfig(){
+
+    private void openTimerConfig() {
         TimerConfig frame = new TimerConfig(this, true);
         frame.setVisible(true);
     }
-    
-    public void setCountDown(String action, String time){
+
+    public void applyTimerWork(String action, String time) {
         // executing the timerframe
-        
+        int h = Integer.parseInt(time.split(":")[0]);
+        int m = Integer.parseInt(time.split(":")[1]);
+
+        TimerCountDownFrame tcframe = new TimerCountDownFrame(h, m, this);
+        tcframe.setVisible(true);
+
+        hideTimerMenu(true);
+        setFutureAction(action);
     }
-    
+
+    public void applyFutureAction() {
+        if (futureAction != null) {
+            if (futureAction.equalsIgnoreCase("shutdown")) {
+                CMDCaller.shutdown();
+            } else {
+                CMDCaller.restart();
+            }
+        }
+    }
+
+    String futureAction;
+
+    public void setFutureAction(String s) {
+        futureAction = s.toLowerCase();
+    }
+
+    public void hideTimerMenu(boolean n) {
+        timerItem.setEnabled(!n);
+    }
+
     AdzanAnnouncer adz;
 
     private void preparePrayersTime() {
-        adz = new AdzanAnnouncer();
+        adz = new AdzanAnnouncer(this);
     }
 
     public void openWebpage(String urlString) {
@@ -212,7 +244,11 @@ public class Main extends javax.swing.JFrame {
 
         // for Adthan purposes
         preparePrayersTime();
-        
+
+        // for settings purposes
+        wdSetting = new Settings(this, true);
+        wdSetting.dispose();
+
         shp.setOutputArea(textAreaDescription);
         shp.setMainFrame(this);
         shp.start();
@@ -512,9 +548,10 @@ public class Main extends javax.swing.JFrame {
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_labelPrayersTimeMouseClicked
-
+    Settings wdSetting;
     private void labelSettingsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelSettingsMouseClicked
-        // TODO add your handling code here:
+        wdSetting = new Settings(this, true);
+        wdSetting.setVisible(true);
     }//GEN-LAST:event_labelSettingsMouseClicked
 
     boolean localMode = true;
@@ -546,6 +583,14 @@ public class Main extends javax.swing.JFrame {
                 new Main().setVisible(false);
             }
         });
+    }
+
+    public void writeRecentActivity(String pesan) {
+        textAreaDescription.append("\n");
+        textAreaDescription.append(pesan);
+
+        DefaultCaret caret = (DefaultCaret) textAreaDescription.getCaret();
+        caret.setUpdatePolicy(ALWAYS_UPDATE);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

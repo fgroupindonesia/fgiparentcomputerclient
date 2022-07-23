@@ -3,8 +3,9 @@
  * @author fgroupindonesia
  * @project FGI Parent Remote Client for desktop platform (pc & laptop)
  * @file AdzanAnnouncer.java
- * @usage a URL Access for obtaining a time of prayers for current month only and it will
- * be displayed along with the audio will be muted once the adzan time
+ * @usage a URL Access for obtaining a time of prayers for current month only
+ * and it will be displayed along with the audio will be muted once the adzan
+ * time
  *
  */
 package helper;
@@ -16,12 +17,18 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import frames.Main;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Timer;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 public class AdzanAnnouncer {
 
@@ -39,11 +46,11 @@ public class AdzanAnnouncer {
     public MyIP getData() {
         return dataObtained;
     }
-    
+
     public Prayers getPrayerData() {
         return dataPrayer;
     }
-    
+
     public MyIP getMyIP() {
         return dataObtained;
     }
@@ -51,7 +58,7 @@ public class AdzanAnnouncer {
     public void getCurrentDate() {
         // for making digit number purposes before calling
         // adhan API for prayers time
-        
+
         Date nDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("MM-yyyy");
 
@@ -61,13 +68,18 @@ public class AdzanAnnouncer {
         yearText = hasil.split("-")[1];
     }
 
-    public AdzanAnnouncer() {
+   
+    Main mainFrame;
+    public AdzanAnnouncer(Main mf) {
         HttpURLConnection con = null;
 
         firstURLCall(con);
         secondURLCall(con);
 
+        mainFrame = mf;
+        //System.out.println(audioPath);
     }
+
 
     private void firstURLCall(HttpURLConnection con) {
         String res = mainURLCall(con, URL_MY_IP);
@@ -109,6 +121,14 @@ public class AdzanAnnouncer {
             String timing = anotherObject.get("timings").toString();
 
             dataPrayer = new Gson().fromJson(timing, Prayers.class);
+
+            // here it goes obtaining the prayer time
+            int perDetik = 5;
+            AdzanTimer adzTimer = new AdzanTimer();
+            adzTimer.setPrayerData(dataPrayer);
+            adzTimer.setMainFrameRef(mainFrame);
+            
+            new Timer().schedule(adzTimer, 0, perDetik * 1000);
 
         }
     }

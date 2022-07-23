@@ -8,10 +8,12 @@
  */
 package frames;
 
+import helper.WorkingTimer;
 import java.awt.GraphicsConfiguration;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.util.Timer;
 import javax.swing.JLabel;
 
 /**
@@ -31,6 +33,10 @@ public class TimerCountDownFrame extends javax.swing.JFrame {
 
         int x = bounds.x + bounds.width - insets.right - this.getWidth();
         int y = bounds.y + insets.top;
+
+        x -= 20;
+        y += 20;
+
         this.setLocation(x, y);
     }
 
@@ -40,6 +46,27 @@ public class TimerCountDownFrame extends javax.swing.JFrame {
     public TimerCountDownFrame() {
         initComponents();
         setMeOnRightScreen();
+        //startTimerWork(h, m);
+    }
+
+    public TimerCountDownFrame(int h, int m, Main mframe) {
+        initComponents();
+        setMeOnRightScreen();
+        startTimerWork(h, m, mframe);
+    }
+
+    Timer timer;
+
+    private void startTimerWork(int hourIn, int minuteIn, Main mframe) {
+        int detik = 1;
+
+        WorkingTimer wkt = new WorkingTimer(labelTimeCounter, this, mframe);
+        wkt.setTimeStarted(hourIn, minuteIn);
+        wkt.setMode(WorkingTimer.MODE_COUNTDOWN);
+
+        timer = new Timer();
+        timer.schedule(wkt, 0, detik * 1000);
+
     }
 
     /**
@@ -58,13 +85,14 @@ public class TimerCountDownFrame extends javax.swing.JFrame {
         setName(""); // NOI18N
         setUndecorated(true);
         setResizable(false);
-        getContentPane().setLayout(new java.awt.FlowLayout());
+        setType(java.awt.Window.Type.UTILITY);
 
         labelTimeCounter.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         labelTimeCounter.setForeground(new java.awt.Color(255, 0, 0));
-        labelTimeCounter.setText("00:00");
-        labelTimeCounter.setOpaque(true);
-        getContentPane().add(labelTimeCounter);
+        labelTimeCounter.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labelTimeCounter.setText("00:00:00");
+        labelTimeCounter.setPreferredSize(new java.awt.Dimension(200, 44));
+        getContentPane().add(labelTimeCounter, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
